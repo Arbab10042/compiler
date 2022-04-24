@@ -9,7 +9,7 @@ class parser
 public:
     bool DEBUG = false;
 
-    void debug(const string &where, const string &messages, const token &t);
+    void debug(const string &where, const string &messages, token t);
 
     void syntax_error();
     token expect(TokenType expected_type);

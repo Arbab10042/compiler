@@ -52,7 +52,7 @@ bool parser::statements()
     return false;
 }*/
 
- void parser:: debug(const string &where, const string &messages, const token& t)
+ void parser:: debug(const string &where, const string &messages, token t)
     {
         if (DEBUG)
         {
@@ -108,6 +108,7 @@ bool parser::E_()
         expect(TokenType::ARITHEMATIC_OPERATOR);
         return T() && E_();
     }
+    return true;
 }
 // T -> F T` .
 bool parser::T()
@@ -123,6 +124,7 @@ bool parser::T_()
         expect(TokenType::ARITHEMATIC_OPERATOR);
         return F() && T_();
     }
+    return true;
 }
 // F -> id | num .
 bool parser::F()
@@ -130,11 +132,14 @@ bool parser::F()
     if (_lexer.peek(1).tokenType == TokenType::IDENTIFIER)
     {
         expect(TokenType::IDENTIFIER);
+        return true;
     }
     else if (_lexer.peek(1).tokenType == TokenType::NUMERIC_LITERAL)
     {
         expect(TokenType::IDENTIFIER);
+        return true;
     }
+    return false;
 }
 
 
@@ -465,14 +470,14 @@ bool parser::IF_(){
     return true;
 }
 
-//////////////////// CONDITIONAL STATEMENT ///////////////////////
+//////////////////// CONDITIONAL STATEMENT ////////////////////////
 
 // ConditionalStatement -> Expression RelationalOP Expression .
 bool parser::CONDITIONAL_STATEMENT()
 {
     if (EXPR())
     {
-        if (RELATIONAL_OP())
+        if (RELATIONAL_OPERATOR())
         {
             if (EXPR())
             {
@@ -529,6 +534,7 @@ bool parser::ARITHEMATIC_OPERATOR(){
        expect(TokenType::ARITHEMATIC_OPERATOR);
         return true;
     }
+    return false;
 }
 
 ///////////////////////// REALTIONAL OPERATORS //////////////////////////////
@@ -537,11 +543,11 @@ bool parser::ARITHEMATIC_OPERATOR(){
 // RelationalOP' -> = | .
 
 // RelationalOP -> = | ~ = | < RelationalOP' | > RelationalOP' .
-bool parser::RELATIONAL_OP(){
+bool parser::RELATIONAL_OPERATOR(){
     const string _c = _lexer.peek(1).lexeme;
     if(isEqual(_c, "=") || isEqual(_c, "~=") || isEqual(_c, "<") || isEqual(_c, ">") || isEqual(_c, ">=") || isEqual(_c, "<="))
     {
-        expect(TokenType::RELATIONAL_OPERATOR);
+        expect(TokenType::RO);
         return true;
     }
     return false;
