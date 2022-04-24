@@ -780,7 +780,7 @@ void lexer::Tokenize() // function that tokenizes your input stream
         case 85: // Final State
             state = 0;
             --it;
-            tokens.push_back(token(string(""), TokenType::COMMENT));
+            tokens.push_back(token(letterStream, TokenType::COMMENT));
             letterStream = "";
             break;
         case 86: // Only for numeric literals

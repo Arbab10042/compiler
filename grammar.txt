@@ -24,9 +24,10 @@ StringBody -> char StringBody .
 StringBody -> num StringBody .
 StringBody -> .
 
-Assignment -> id < - Expression Assignment` .
-Assignment` -> Type ; .
-Assignment` -> ; .
+Assignment -> id Assignment2 .
+Assignment2 -> , Assignment | <- Assignment3 | Type ; .
+Assignment3 -> Expression Assignment4 .
+Assignment4 -> , Assignment | Type ; .
 
 Type -> int .
 Type -> char .

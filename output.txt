@@ -1,32 +1,43 @@
-{ , COMMENT}
-{ , COMMENT}
-{ , COMMENT}
-{ , COMMENT}
+{#full credit for running (when your compiler is complete) this type of code (no bonus) , COMMENT}
+{#program to calculate fibonacci series and display on stdout , COMMENT}
 { , FUNC}
 { , INT}
-{calculateFib , IDENTIFIER}
-{n , IDENTIFIER}
-{ , INT}
+{main , IDENTIFIER}
 { , COLON}
 { , BEGIN}
-{ , COMMENT}
+{# Three address code generation starts after here , COMMENT}
+{#variable declarations, note num and i are not initialized , COMMENT}
 {x , IDENTIFIER}
 { , ASSIGNMENT_OPERATOR}
 {0 , NUMERIC_LITERAL}
-{ , COMMA}
+{ , INT}
+{ , SEMICOLON}
 {y , IDENTIFIER}
 { , ASSIGNMENT_OPERATOR}
 {1 , NUMERIC_LITERAL}
-{ , COMMA}
+{ , INT}
+{ , SEMICOLON}
 {z , IDENTIFIER}
 { , ASSIGNMENT_OPERATOR}
 {0 , NUMERIC_LITERAL}
-{ , COMMA}
+{ , INT}
+{ , SEMICOLON}
 {i  , IDENTIFIER}
 { , INT}
 { , SEMICOLON}
+{num , IDENTIFIER}
+{ , INT}
+{ , SEMICOLON}
+{ , PRINT}
+{"Enter the number :" , STRING}
+{ , SEMICOLON}
+{#print  , COMMENT}
+{ , IN}
+{num , IDENTIFIER}
+{ , SEMICOLON}
+{#take input , COMMENT}
 { , IF}
-{n , IDENTIFIER}
+{num , IDENTIFIER}
 {LT , RO}
 {0 , NUMERIC_LITERAL}
 { , COLON}
@@ -34,18 +45,16 @@
 { , PRINT}
 {"negative number entered\n" , STRING}
 { , SEMICOLON}
-{ , COMMENT}
+{#print , COMMENT}
 { , RETURN}
 {0 , NUMERIC_LITERAL}
 { , SEMICOLON}
-{ , COMMENT}
+{# this statement just halt the program , COMMENT}
 { , END}
-{ , ELSE}
-{ , BEGIN}
 { , PRINT}
 {"\nThe fibonacci series :" , STRING}
 { , SEMICOLON}
-{ , COMMENT}
+{#print , COMMENT}
 { , FOR}
 {i , IDENTIFIER}
 { , ASSIGNMENT_OPERATOR}
@@ -53,14 +62,14 @@
 { , COMMA}
 {i , IDENTIFIER}
 {LT , RO}
-{n , IDENTIFIER}
+{num , IDENTIFIER}
 { , COMMA}
 {i , IDENTIFIER}
 { , ASSIGNMENT_OPERATOR}
 {i , IDENTIFIER}
 {+1 , NUMERIC_LITERAL}
 { , COLON}
-{ , COMMENT}
+{# loop calculating actual output , COMMENT}
 { , BEGIN}
 { , PRINT}
 {x , IDENTIFIER}
@@ -73,47 +82,61 @@
 {x , IDENTIFIER}
 {+y , IDENTIFIER}
 { , SEMICOLON}
-{ , COMMENT}
+{# store sum in z , COMMENT}
 {x , IDENTIFIER}
 { , ASSIGNMENT_OPERATOR}
 {y , IDENTIFIER}
 { , SEMICOLON}
-{ , COMMENT}
+{#assign value of y to x , COMMENT}
 {y , IDENTIFIER}
 { , ASSIGNMENT_OPERATOR}
 {z , IDENTIFIER}
 { , SEMICOLON}
-{ , COMMENT}
+{#assign values of z to y , COMMENT}
 { , END}
-{ , END}
-{ , RETURN}
-{0 , NUMERIC_LITERAL}
-{ , SEMICOLON}
-{ , END}
-{ , COMMENT}
-{ , FUNC}
-{ , INT}
-{main , IDENTIFIER}
-{ , COLON}
-{ , BEGIN}
-{ , COMMENT}
-{num , IDENTIFIER}
-{ , INT}
-{ , SEMICOLON}
 { , PRINT}
-{"Enter the number :" , STRING}
-{ , SEMICOLON}
-{ , COMMENT}
-{ , IN}
-{num , IDENTIFIER}
-{ , SEMICOLON}
-{ , COMMENT}
-{ , CALL}
-{calculateFib , IDENTIFIER}
-{num , IDENTIFIER}
+{"\n" , STRING}
 { , SEMICOLON}
 { , RETURN}
 {0 , NUMERIC_LITERAL}
 { , SEMICOLON}
-{ , COMMENT}
+{#halts program , COMMENT}
 { , END}
+DEBUG: FUNC: Failed: {#full credit for running (when your compiler is complete) this type of code (no bonus) , COMMENT}
+DEBUG: FUNC: Failed: {#program to calculate fibonacci series and display on stdout , COMMENT}
+DEBUG: IF: Failed: {# Three address code generation starts after here , COMMENT}
+DEBUG: FOR: Failed: {# Three address code generation starts after here , COMMENT}
+DEBUG: PRINT: Failed: {# Three address code generation starts after here , COMMENT}
+DEBUG: IF: Failed: {#variable declarations, note num and i are not initialized , COMMENT}
+DEBUG: FOR: Failed: {#variable declarations, note num and i are not initialized , COMMENT}
+DEBUG: PRINT: Failed: {#variable declarations, note num and i are not initialized , COMMENT}
+DEBUG: IF: Failed: {x , IDENTIFIER}
+DEBUG: FOR: Failed: {x , IDENTIFIER}
+DEBUG: PRINT: Failed: {x , IDENTIFIER}
+DEBUG: COMMENT: COMMENT FAILED: {x , IDENTIFIER}
+{ , INT}
+Expression is good!
+DEBUG: IF: Failed: {y , IDENTIFIER}
+DEBUG: FOR: Failed: {y , IDENTIFIER}
+DEBUG: PRINT: Failed: {y , IDENTIFIER}
+DEBUG: COMMENT: COMMENT FAILED: {y , IDENTIFIER}
+{ , INT}
+Expression is good!
+DEBUG: IF: Failed: {z , IDENTIFIER}
+DEBUG: FOR: Failed: {z , IDENTIFIER}
+DEBUG: PRINT: Failed: {z , IDENTIFIER}
+DEBUG: COMMENT: COMMENT FAILED: {z , IDENTIFIER}
+{ , INT}
+Expression is good!
+DEBUG: IF: Failed: {i  , IDENTIFIER}
+DEBUG: FOR: Failed: {i  , IDENTIFIER}
+DEBUG: PRINT: Failed: {i  , IDENTIFIER}
+DEBUG: COMMENT: COMMENT FAILED: {i  , IDENTIFIER}
+DEBUG: ASSIGN: Failed: { , INT}
+DEBUG: CODE_BODY: Failed: { , INT}
+DEBUG: CODE: Failed: { , INT}
+DEBUG: FUNC: Failed: { , INT}
+DEBUG: COMMENT: COMMENT FAILED: { , INT}
+DEBUG: START: Failed: { , INT}
+
+0

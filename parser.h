@@ -7,7 +7,7 @@ class parser
     lexer _lexer;
 
 public:
-    bool DEBUG = false;
+    bool DEBUG = true;
 
     void debug(const string &where, const string &messages, token t);
 

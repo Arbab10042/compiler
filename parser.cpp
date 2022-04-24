@@ -52,17 +52,14 @@ bool parser::statements()
     return false;
 }*/
 
- void parser:: debug(const string &where, const string &messages, token t)
+void parser::debug(const string &where, const string &messages, token t)
+{
+    if (DEBUG)
     {
-        if (DEBUG)
-        {
-            cout << "DEBUG: " << where << ": " << messages << ": ";
-            t.Print();
-        }
+        cout << "DEBUG: " << where << ": " << messages << ": ";
+        t.Print();
     }
-
-
-
+}
 
 bool isEqual(const string &a, const string &b)
 {
@@ -76,9 +73,16 @@ bool parser::START()
 {
     // Start -> Function Start | Comment Start
     if (FUNC())
-        return true;
+    {
+        // START();
+        return START();
+    }
     else if (COMMENT())
-        return true;
+    {
+
+        return START();
+    }
+    debug(__func__, "Failed", _lexer.peek(1));
     return false;
 }
 
@@ -136,12 +140,12 @@ bool parser::F()
     }
     else if (_lexer.peek(1).tokenType == TokenType::NUMERIC_LITERAL)
     {
-        expect(TokenType::IDENTIFIER);
+        expect(TokenType::NUMERIC_LITERAL);
         return true;
     }
+    debug(__func__, "Failed", _lexer.peek(1));
     return false;
 }
-
 
 ////////////////// PRINT /////////////////////
 /*
@@ -149,7 +153,8 @@ Print -> print PrintBody ; .
 PrintBody -> Expression .
 */
 
-bool parser::PRINT(){
+bool parser::PRINT()
+{
     if (_lexer.peek(1).tokenType == TokenType::PRINT)
     {
         expect(TokenType::PRINT);
@@ -162,10 +167,13 @@ bool parser::PRINT(){
             }
         }
     }
+    debug(__func__, "Failed", _lexer.peek(1));
+
     return false;
 }
 
-bool parser::PRINT_BODY(){
+bool parser::PRINT_BODY()
+{
     return EXPR();
 }
 
@@ -178,7 +186,6 @@ bool parser::COMMENT()
     {
         const string _c = _lexer.peek(1).lexeme;
 
-        
         // actual CFG but won't run for our lexer :)
         // if (StringBody())
         // {
@@ -188,17 +195,15 @@ bool parser::COMMENT()
         //     }
         // }
 
-        
-        if(_c[0]== '#' && _c[_c.size()-1]=='\n')
+        if (_c[0] == '#')
         {
-        expect(TokenType::COMMENT);
-        return true;
+            expect(TokenType::COMMENT);
+            return true;
         }
     }
     debug(__func__, "COMMENT FAILED", _lexer.peek(1));
     return false;
 }
-
 
 /////////////// STRING ////////////////
 
@@ -206,15 +211,18 @@ bool parser::COMMENT()
 String -> " StringBody " .
 StringBody -> char StringBody | num StringBody | .
 */
-bool parser::STRING(){
-    const string _c=_lexer.peek(1).lexeme;
+bool parser::STRING()
+{
+    const string _c = _lexer.peek(1).lexeme;
 
-    if(_c[0]=='"' && _c[_c.size()-1]=='"')
+    if (_c[0] == '"' && _c[_c.size() - 1] == '"')
     {
         expect(TokenType::STRING);
         return true;
     }
-return false;
+    debug(__func__, "Failed", _lexer.peek(1));
+
+    return false;
 }
 
 /////////////////// ASSIGNMENT //////////////////////
@@ -225,7 +233,8 @@ return false;
  */
 
 // ASSIGN -> id < - EXPR ASSIGN_ .
-bool parser::ASSIGN(){
+bool parser::ASSIGN()
+{
     if (_lexer.peek(1).tokenType == TokenType::IDENTIFIER)
     {
         expect(TokenType::IDENTIFIER);
@@ -234,13 +243,18 @@ bool parser::ASSIGN(){
             expect(TokenType::ASSIGNMENT_OPERATOR);
             if (EXPR())
             {
-               if(ASSIGN_())
-               {
-                   return true;
-               }
+                _lexer.peek(1).Print();
+                cout << "Expression is good!\n";
+
+                if (ASSIGN_())
+                {
+                    return true;
+                }
             }
         }
     }
+    debug(__func__, "Failed", _lexer.peek(1));
+
     return false;
 }
 
@@ -260,6 +274,8 @@ bool parser::ASSIGN_()
         expect(TokenType::SEMICOLON);
         return true;
     }
+    debug(__func__, "Failed", _lexer.peek(1));
+
     return false;
 }
 
@@ -268,17 +284,19 @@ bool parser::ASSIGN_()
 // Type -> char | int .
 bool parser::TYPE()
 {
-    if (_lexer.peek(1).tokenType == TokenType::CHAR )
+    if (_lexer.peek(1).tokenType == TokenType::CHAR)
     {
         expect(TokenType::CHAR);
         return true;
     }
-    
+
     else if (_lexer.peek(1).tokenType == TokenType::INT)
     {
         expect(TokenType::INT);
         return true;
     }
+    debug(__func__, "Failed", _lexer.peek(1));
+
     return false;
 }
 
@@ -304,6 +322,8 @@ bool parser::RETURN()
             }
         }
     }
+    debug(__func__, "Failed", _lexer.peek(1));
+
     return false;
 }
 
@@ -314,7 +334,7 @@ bool parser::RETURN_BODY()
         return true;
     else if (STRING())
         return true;
-   return true;
+    return true;
 }
 
 //////////////// FUNCTION //////////////////////
@@ -337,7 +357,7 @@ bool parser::FUNC()
                 if (_lexer.peek(1).tokenType == TokenType::COLON)
                 {
                     expect(TokenType::COLON);
-                    if (CODE_BODY())
+                    if (CODE())
                     {
                         if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
                         {
@@ -349,6 +369,8 @@ bool parser::FUNC()
             }
         }
     }
+    debug(__func__, "Failed", _lexer.peek(1));
+
     return false;
 }
 
@@ -366,14 +388,17 @@ bool parser::CODE()
         if (CODE_BODY())
         {
 
-                return true;
+            return true;
         }
     }
+    debug(__func__, "Failed", _lexer.peek(1));
+
     return false;
 }
 
 // CodeBody -> If CodeBody CodeBodyEnd | For CodeBody CodeBodyEnd | Print CodeBody CodeBodyEnd | Comment CodeBody CodeBodyEnd | Assignment CodeBody CodeBodyEnd .
-bool parser::CODE_BODY(){
+bool parser::CODE_BODY()
+{
     if (IF())
         return CODE_BODY() && CODE_BODY_END();
     else if (FOR())
@@ -384,11 +409,14 @@ bool parser::CODE_BODY(){
         return CODE_BODY() && CODE_BODY_END();
     else if (ASSIGN())
         return CODE_BODY() && CODE_BODY_END();
+    debug(__func__, "Failed", _lexer.peek(1));
+
     return false;
 }
 
 // CodeBodyEnd -> Return end | end .
-bool parser::CODE_BODY_END(){
+bool parser::CODE_BODY_END()
+{
     if (RETURN())
     {
         if (_lexer.peek(1).tokenType == TokenType::END)
@@ -402,6 +430,8 @@ bool parser::CODE_BODY_END(){
         expect(TokenType::END);
         return true;
     }
+    debug(__func__, "Failed", _lexer.peek(1));
+
     return false;
 }
 
@@ -422,7 +452,7 @@ bool parser::IF()
             if (_lexer.peek(1).tokenType == TokenType::COLON)
             {
                 expect(TokenType::COLON);
-                if (CODE_BODY())
+                if (CODE())
                 {
                     if (IF_())
                     {
@@ -432,11 +462,14 @@ bool parser::IF()
             }
         }
     }
+    debug(__func__, "Failed", _lexer.peek(1));
+
     return false;
 }
 
 // IF_ -> elif ConditionalStatement : CodeBody IF_ | else : CodeBody | .
-bool parser::IF_(){
+bool parser::IF_()
+{
     if (_lexer.peek(1).tokenType == TokenType::ELIF)
     {
         expect(TokenType::ELIF);
@@ -445,7 +478,7 @@ bool parser::IF_(){
             if (_lexer.peek(1).tokenType == TokenType::COLON)
             {
                 expect(TokenType::COLON);
-                if (CODE_BODY())
+                if (CODE())
                 {
                     if (IF_())
                     {
@@ -461,7 +494,7 @@ bool parser::IF_(){
         if (_lexer.peek(1).tokenType == TokenType::COLON)
         {
             expect(TokenType::COLON);
-            if (CODE_BODY())
+            if (CODE())
             {
                 return true;
             }
@@ -485,13 +518,16 @@ bool parser::CONDITIONAL_STATEMENT()
             }
         }
     }
+    debug(__func__, "Failed", _lexer.peek(1));
+
     return false;
 }
 
 /////////////////////// FOR ////////////////////////////////
 
 // For -> for Assignment, ConditionalStatement, Assignment : Code .
-bool parser::FOR(){
+bool parser::FOR()
+{
     if (_lexer.peek(1).tokenType == TokenType::FOR)
     {
         expect(TokenType::FOR);
@@ -521,19 +557,24 @@ bool parser::FOR(){
             }
         }
     }
+    debug(__func__, "Failed", _lexer.peek(1));
+
     return false;
 }
 
 //////////////////////// ARTHIMATIC OPERATORS //////////////////////////////
 
 // ArthimaticOP -> + | - | * | / | % .
-bool parser::ARITHEMATIC_OPERATOR(){
+bool parser::ARITHEMATIC_OPERATOR()
+{
     const string _c = _lexer.peek(1).lexeme;
-    if(isEqual(_c, "+") || isEqual(_c, "-") || isEqual(_c, "*") || isEqual(_c, "/") || isEqual(_c, "%"))
+    if (isEqual(_c, "+") || isEqual(_c, "-") || isEqual(_c, "*") || isEqual(_c, "/") || isEqual(_c, "%"))
     {
-       expect(TokenType::ARITHEMATIC_OPERATOR);
+        expect(TokenType::ARITHEMATIC_OPERATOR);
         return true;
     }
+    debug(__func__, "Failed", _lexer.peek(1));
+
     return false;
 }
 
@@ -543,12 +584,15 @@ bool parser::ARITHEMATIC_OPERATOR(){
 // RelationalOP' -> = | .
 
 // RelationalOP -> = | ~ = | < RelationalOP' | > RelationalOP' .
-bool parser::RELATIONAL_OPERATOR(){
+bool parser::RELATIONAL_OPERATOR()
+{
     const string _c = _lexer.peek(1).lexeme;
-    if(isEqual(_c, "=") || isEqual(_c, "~=") || isEqual(_c, "<") || isEqual(_c, ">") || isEqual(_c, ">=") || isEqual(_c, "<="))
+    if (isEqual(_c, "=") || isEqual(_c, "~=") || isEqual(_c, "<") || isEqual(_c, ">") || isEqual(_c, ">=") || isEqual(_c, "<="))
     {
         expect(TokenType::RO);
         return true;
     }
+    debug(__func__, "Failed", _lexer.peek(1));
+
     return false;
 }
