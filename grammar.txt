@@ -32,6 +32,8 @@ Assignment4 -> , Assignment | Type ; .
 Type -> int .
 Type -> char .
 
+In -> in id ; .
+
 Eof -> \n .
 
 Return -> return ReturnBody .
@@ -41,13 +43,14 @@ ReturnBody -> .
 
 Function -> func Type id : Code .
 
-Code -> begin CodeBody .
+Code -> begin CodeBody | Comment Code .
 CodeBody -> If CodeBody CodeBodyEnd .
 CodeBody -> For CodeBody CodeBodyEnd .
 CodeBody -> Print CodeBody CodeBodyEnd .
 CodeBody -> Comment CodeBody CodeBodyEnd .
 CodeBody -> Assignment CodeBody CodeBodyEnd .
-CodeBodyEnd -> Return end .
+CodeBody -> In CodeBody CodeBodyEnd .
+CodeBody -> Return CodeBody CodeBodyEnd .
 CodeBodyEnd -> end .
 
 If -> if ConditionalStatement : Code If' .

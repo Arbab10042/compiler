@@ -10,6 +10,13 @@ token parser::expect(TokenType expected_type)
     token t = _lexer.getNextToken();
     if (t.tokenType != expected_type)
         syntax_error();
+    else
+    {
+        cout << "Accepted token: ";
+        t.Print();
+        cout << "\n";
+        return t;
+    }
     return t;
 }
 parser::parser(const char filename[])
@@ -75,12 +82,23 @@ bool parser::START()
     if (FUNC())
     {
         // START();
-        return START();
+        bool a = START();
+        if (_lexer.getCurrentToken().tokenType == TokenType::END_OF_FILE)
+        {
+            expect(TokenType::END_OF_FILE);
+            return true;
+        }
+        return a;
     }
     else if (COMMENT())
     {
-
-        return START();
+        bool a = START();
+        if (_lexer.getCurrentToken().tokenType == TokenType::END_OF_FILE)
+        {
+            expect(TokenType::END_OF_FILE);
+            return true;
+        }
+        return a;
     }
     debug(__func__, "Failed", _lexer.peek(1));
     return false;
@@ -110,6 +128,10 @@ bool parser::E_()
     if (isEqual(_c, "+") || isEqual(_c, "-"))
     {
         expect(TokenType::ARITHEMATIC_OPERATOR);
+        return T() && E_();
+    }
+    else if (_c[0] == '+' || _c[0] == '-')
+    {
         return T() && E_();
     }
     return true;
@@ -150,7 +172,7 @@ bool parser::F()
 ////////////////// PRINT /////////////////////
 /*
 Print -> print PrintBody ; .
-PrintBody -> Expression .
+PrintBody -> Expression | String .
 */
 
 bool parser::PRINT()
@@ -174,7 +196,7 @@ bool parser::PRINT()
 
 bool parser::PRINT_BODY()
 {
-    return EXPR();
+    return EXPR() || STRING();
 }
 
 /////////////// COMMENT ////////////////
@@ -228,29 +250,21 @@ bool parser::STRING()
 /////////////////// ASSIGNMENT //////////////////////
 
 /**
-  ASSIGN -> id < - EXPR ASSIGN_ .
-  ASSIGN_ -> Type ; | ; .
+Assignment -> id Assignment2 .
+Assignment2 -> , Assignment | <- Assignment3 | Type ; .
+Assignment3 -> Expression Assignment4 .
+Assignment4 -> , Assignment | Type ; .
  */
 
-// ASSIGN -> id < - EXPR ASSIGN_ .
+// Assignment -> id Assignment2 .
 bool parser::ASSIGN()
 {
     if (_lexer.peek(1).tokenType == TokenType::IDENTIFIER)
     {
         expect(TokenType::IDENTIFIER);
-        if (_lexer.peek(1).tokenType == TokenType::ASSIGNMENT_OPERATOR)
+        if (ASSIGN_2())
         {
-            expect(TokenType::ASSIGNMENT_OPERATOR);
-            if (EXPR())
-            {
-                _lexer.peek(1).Print();
-                cout << "Expression is good!\n";
-
-                if (ASSIGN_())
-                {
-                    return true;
-                }
-            }
+            return true;
         }
     }
     debug(__func__, "Failed", _lexer.peek(1));
@@ -258,10 +272,52 @@ bool parser::ASSIGN()
     return false;
 }
 
-//   ASSIGN_ -> Type ; | ; .
-bool parser::ASSIGN_()
+// Assignment2 -> , Assignment | <- Assignment3 | Type ; .
+bool parser::ASSIGN_2()
 {
-    if (TYPE())
+    if (_lexer.peek(1).tokenType == TokenType::COMMA)
+    {
+        expect(TokenType::COMMA);
+        return ASSIGN();
+    }
+    else if (_lexer.peek(1).tokenType == TokenType::ASSIGNMENT_OPERATOR)
+    {
+        expect(TokenType::ASSIGNMENT_OPERATOR);
+        if (ASSIGN_3())
+        {
+            return true;
+        }
+    }
+    else if (TYPE())
+    {
+        if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
+        {
+            expect(TokenType::SEMICOLON);
+            return true;
+        }
+    }
+    return false;
+}
+
+// Assignment3 -> Expression Assignment4 .
+bool parser::ASSIGN_3()
+{
+    if (EXPR())
+    {
+        return ASSIGN_4();
+    }
+    return false;
+}
+
+// Assignment4 -> , Assignment | Type ; | ; .
+bool parser::ASSIGN_4()
+{
+    if (_lexer.peek(1).tokenType == TokenType::COMMA)
+    {
+        expect(TokenType::COMMA);
+        return ASSIGN();
+    }
+    else if (TYPE())
     {
         if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
         {
@@ -274,8 +330,6 @@ bool parser::ASSIGN_()
         expect(TokenType::SEMICOLON);
         return true;
     }
-    debug(__func__, "Failed", _lexer.peek(1));
-
     return false;
 }
 
@@ -374,10 +428,33 @@ bool parser::FUNC()
     return false;
 }
 
+////////////////// IN ////////////////////
+
+// In -> in id ;
+bool parser::IN()
+{
+    if (_lexer.peek(1).tokenType == TokenType::IN)
+    {
+        expect(TokenType::IN);
+        if (_lexer.peek(1).tokenType == TokenType::IDENTIFIER)
+        {
+            expect(TokenType::IDENTIFIER);
+            if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
+            {
+                expect(TokenType::SEMICOLON);
+                return true;
+            }
+        }
+    }
+    debug(__func__, "Failed", _lexer.peek(1));
+
+    return false;
+}
+
 ///////////////// CODE //////////////////////
-// Code -> begin CodeBody .
-// CodeBody -> If CodeBody CodeBodyEnd | For CodeBody CodeBodyEnd | Print CodeBody CodeBodyEnd | Comment CodeBody CodeBodyEnd | Assignment CodeBody CodeBodyEnd .
-// CodeBodyEnd -> Return end | end .
+// Code -> begin CodeBody | Comment Code .
+// CodeBody -> If CodeBody CodeBodyEnd | For CodeBody CodeBodyEnd | Print CodeBody CodeBodyEnd | Comment CodeBody CodeBodyEnd | Assignment CodeBody CodeBodyEnd | In CodeBody CodeBodyEnd | Return CodeBody CodeBodyEnd .
+// CodeBodyEnd -> end .
 
 // Code -> begin CodeBody .
 bool parser::CODE()
@@ -391,41 +468,72 @@ bool parser::CODE()
             return true;
         }
     }
-    debug(__func__, "Failed", _lexer.peek(1));
-
-    return false;
-}
-
-// CodeBody -> If CodeBody CodeBodyEnd | For CodeBody CodeBodyEnd | Print CodeBody CodeBodyEnd | Comment CodeBody CodeBodyEnd | Assignment CodeBody CodeBodyEnd .
-bool parser::CODE_BODY()
-{
-    if (IF())
-        return CODE_BODY() && CODE_BODY_END();
-    else if (FOR())
-        return CODE_BODY() && CODE_BODY_END();
-    else if (PRINT())
-        return CODE_BODY() && CODE_BODY_END();
     else if (COMMENT())
-        return CODE_BODY() && CODE_BODY_END();
-    else if (ASSIGN())
-        return CODE_BODY() && CODE_BODY_END();
-    debug(__func__, "Failed", _lexer.peek(1));
-
-    return false;
-}
-
-// CodeBodyEnd -> Return end | end .
-bool parser::CODE_BODY_END()
-{
-    if (RETURN())
     {
-        if (_lexer.peek(1).tokenType == TokenType::END)
+        if (CODE())
         {
-            expect(TokenType::END);
             return true;
         }
     }
-    else if (_lexer.peek(1).tokenType == TokenType::END)
+    debug(__func__, "Failed", _lexer.peek(1));
+
+    return false;
+}
+
+// CodeBody -> If CodeBody CodeBodyEnd | For CodeBody CodeBodyEnd | Print CodeBody CodeBodyEnd | Comment CodeBody CodeBodyEnd | Assignment CodeBody CodeBodyEnd | In CodeBody CodeBodyEnd | Return CodeBody CodeBodyEnd .
+bool parser::CODE_BODY()
+{
+    if (IF())
+    {
+        bool a = CODE_BODY();
+        bool b = CODE_BODY_END();
+        return a && b;
+    }
+    else if (FOR())
+    {
+        bool a = CODE_BODY();
+        bool b = CODE_BODY_END();
+        return a && b;
+    }
+    else if (PRINT())
+    {
+        bool a = CODE_BODY();
+        bool b = CODE_BODY_END();
+        return a && b;
+    }
+    else if (COMMENT())
+    {
+        bool a = CODE_BODY();
+        bool b = CODE_BODY_END();
+        return a && b;
+    }
+    else if (ASSIGN())
+    {
+        bool a = CODE_BODY();
+        bool b = CODE_BODY_END();
+        return a && b;
+    }
+    else if (IN())
+    {
+        bool a = CODE_BODY();
+        bool b = CODE_BODY_END();
+        return a && b;
+    }
+    else if (RETURN())
+    {
+        bool a = CODE_BODY();
+        bool b = CODE_BODY_END();
+        return a && b;
+    }
+    debug(__func__, "Failed", _lexer.peek(1));
+
+    return false;
+}
+
+// CodeBodyEnd -> end .
+bool parser::CODE_BODY_END()
+{
+    if (_lexer.peek(1).tokenType == TokenType::END)
     {
         expect(TokenType::END);
         return true;
@@ -452,7 +560,7 @@ bool parser::IF()
             if (_lexer.peek(1).tokenType == TokenType::COLON)
             {
                 expect(TokenType::COLON);
-                if (CODE())
+                CODE();
                 {
                     if (IF_())
                     {
@@ -478,7 +586,7 @@ bool parser::IF_()
             if (_lexer.peek(1).tokenType == TokenType::COLON)
             {
                 expect(TokenType::COLON);
-                if (CODE())
+                CODE();
                 {
                     if (IF_())
                     {
@@ -531,7 +639,7 @@ bool parser::FOR()
     if (_lexer.peek(1).tokenType == TokenType::FOR)
     {
         expect(TokenType::FOR);
-        if (ASSIGN())
+        if (FOR_ASSIGN())
         {
             if (_lexer.peek(1).tokenType == TokenType::COMMA)
             {
@@ -541,7 +649,7 @@ bool parser::FOR()
                     if (_lexer.peek(1).tokenType == TokenType::COMMA)
                     {
                         expect(TokenType::COMMA);
-                        if (ASSIGN())
+                        if (FOR_ASSIGN())
                         {
                             if (_lexer.peek(1).tokenType == TokenType::COLON)
                             {
@@ -554,6 +662,26 @@ bool parser::FOR()
                         }
                     }
                 }
+            }
+        }
+    }
+    debug(__func__, "Failed", _lexer.peek(1));
+
+    return false;
+}
+
+// FOR_ASSIGN -> id <- Expression .
+bool parser::FOR_ASSIGN()
+{
+    if (_lexer.peek(1).tokenType == TokenType::IDENTIFIER)
+    {
+        expect(TokenType::IDENTIFIER);
+        if (_lexer.peek(1).tokenType == TokenType::ASSIGNMENT_OPERATOR)
+        {
+            expect(TokenType::ASSIGNMENT_OPERATOR);
+            if (EXPR())
+            {
+                return true;
             }
         }
     }
@@ -587,7 +715,8 @@ bool parser::ARITHEMATIC_OPERATOR()
 bool parser::RELATIONAL_OPERATOR()
 {
     const string _c = _lexer.peek(1).lexeme;
-    if (isEqual(_c, "=") || isEqual(_c, "~=") || isEqual(_c, "<") || isEqual(_c, ">") || isEqual(_c, ">=") || isEqual(_c, "<="))
+    // if (isEqual(_c, "=") || isEqual(_c, "~=") || isEqual(_c, "<") || isEqual(_c, ">") || isEqual(_c, ">=") || isEqual(_c, "<="))
+    if (isEqual(_c, "=") || isEqual(_c, "~=") || isEqual(_c, "NE") || isEqual(_c, "LT") || isEqual(_c, "GT") || isEqual(_c, "GE") || isEqual(_c, "LE"))
     {
         expect(TokenType::RO);
         return true;

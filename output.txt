@@ -1,4 +1,6 @@
-{#full credit for running (when your compiler is complete) this type of code (no bonus) , COMMENT}
+{#if you were able to run this code (when your compiler is finished) you will get 2 bonus marks , COMMENT}
+{#1) The for loop is inside else part , COMMENT}
+{#2) The list initialization at line 8 , COMMENT}
 {#program to calculate fibonacci series and display on stdout , COMMENT}
 { , FUNC}
 { , INT}
@@ -10,21 +12,17 @@
 {x , IDENTIFIER}
 { , ASSIGNMENT_OPERATOR}
 {0 , NUMERIC_LITERAL}
-{ , INT}
-{ , SEMICOLON}
+{ , COMMA}
 {y , IDENTIFIER}
 { , ASSIGNMENT_OPERATOR}
 {1 , NUMERIC_LITERAL}
-{ , INT}
-{ , SEMICOLON}
+{ , COMMA}
 {z , IDENTIFIER}
 { , ASSIGNMENT_OPERATOR}
 {0 , NUMERIC_LITERAL}
-{ , INT}
-{ , SEMICOLON}
-{i  , IDENTIFIER}
-{ , INT}
-{ , SEMICOLON}
+{ , COMMA}
+{i , IDENTIFIER}
+{ , COMMA}
 {num , IDENTIFIER}
 { , INT}
 { , SEMICOLON}
@@ -35,7 +33,7 @@
 { , IN}
 {num , IDENTIFIER}
 { , SEMICOLON}
-{#take input , COMMENT}
+{# take input in num variable , COMMENT}
 { , IF}
 {num , IDENTIFIER}
 {LT , RO}
@@ -51,6 +49,8 @@
 { , SEMICOLON}
 {# this statement just halt the program , COMMENT}
 { , END}
+{ , ELSE}
+{ , BEGIN}
 { , PRINT}
 {"\nThe fibonacci series :" , STRING}
 { , SEMICOLON}
@@ -94,49 +94,190 @@
 { , SEMICOLON}
 {#assign values of z to y , COMMENT}
 { , END}
-{ , PRINT}
-{"\n" , STRING}
-{ , SEMICOLON}
+{ , END}
 { , RETURN}
 {0 , NUMERIC_LITERAL}
 { , SEMICOLON}
 {#halts program , COMMENT}
 { , END}
-DEBUG: FUNC: Failed: {#full credit for running (when your compiler is complete) this type of code (no bonus) , COMMENT}
+DEBUG: FUNC: Failed: {#if you were able to run this code (when your compiler is finished) you will get 2 bonus marks , COMMENT}
+Accepted token: {#if you were able to run this code (when your compiler is finished) you will get 2 bonus marks , COMMENT}
+
+DEBUG: FUNC: Failed: {#1) The for loop is inside else part , COMMENT}
+Accepted token: {#1) The for loop is inside else part , COMMENT}
+
+DEBUG: FUNC: Failed: {#2) The list initialization at line 8 , COMMENT}
+Accepted token: {#2) The list initialization at line 8 , COMMENT}
+
 DEBUG: FUNC: Failed: {#program to calculate fibonacci series and display on stdout , COMMENT}
+Accepted token: {#program to calculate fibonacci series and display on stdout , COMMENT}
+
+Accepted token: { , FUNC}
+
+Accepted token: { , INT}
+
+Accepted token: {main , IDENTIFIER}
+
+Accepted token: { , COLON}
+
+Accepted token: { , BEGIN}
+
 DEBUG: IF: Failed: {# Three address code generation starts after here , COMMENT}
 DEBUG: FOR: Failed: {# Three address code generation starts after here , COMMENT}
 DEBUG: PRINT: Failed: {# Three address code generation starts after here , COMMENT}
+Accepted token: {# Three address code generation starts after here , COMMENT}
+
 DEBUG: IF: Failed: {#variable declarations, note num and i are not initialized , COMMENT}
 DEBUG: FOR: Failed: {#variable declarations, note num and i are not initialized , COMMENT}
 DEBUG: PRINT: Failed: {#variable declarations, note num and i are not initialized , COMMENT}
+Accepted token: {#variable declarations, note num and i are not initialized , COMMENT}
+
 DEBUG: IF: Failed: {x , IDENTIFIER}
 DEBUG: FOR: Failed: {x , IDENTIFIER}
 DEBUG: PRINT: Failed: {x , IDENTIFIER}
 DEBUG: COMMENT: COMMENT FAILED: {x , IDENTIFIER}
-{ , INT}
-Expression is good!
-DEBUG: IF: Failed: {y , IDENTIFIER}
-DEBUG: FOR: Failed: {y , IDENTIFIER}
-DEBUG: PRINT: Failed: {y , IDENTIFIER}
-DEBUG: COMMENT: COMMENT FAILED: {y , IDENTIFIER}
-{ , INT}
-Expression is good!
-DEBUG: IF: Failed: {z , IDENTIFIER}
-DEBUG: FOR: Failed: {z , IDENTIFIER}
-DEBUG: PRINT: Failed: {z , IDENTIFIER}
-DEBUG: COMMENT: COMMENT FAILED: {z , IDENTIFIER}
-{ , INT}
-Expression is good!
-DEBUG: IF: Failed: {i  , IDENTIFIER}
-DEBUG: FOR: Failed: {i  , IDENTIFIER}
-DEBUG: PRINT: Failed: {i  , IDENTIFIER}
-DEBUG: COMMENT: COMMENT FAILED: {i  , IDENTIFIER}
-DEBUG: ASSIGN: Failed: { , INT}
-DEBUG: CODE_BODY: Failed: { , INT}
-DEBUG: CODE: Failed: { , INT}
-DEBUG: FUNC: Failed: { , INT}
-DEBUG: COMMENT: COMMENT FAILED: { , INT}
-DEBUG: START: Failed: { , INT}
+Accepted token: {x , IDENTIFIER}
+
+Accepted token: { , ASSIGNMENT_OPERATOR}
+
+Accepted token: {0 , NUMERIC_LITERAL}
+
+Accepted token: { , COMMA}
+
+Accepted token: {y , IDENTIFIER}
+
+Accepted token: { , ASSIGNMENT_OPERATOR}
+
+Accepted token: {1 , NUMERIC_LITERAL}
+
+Accepted token: { , COMMA}
+
+Accepted token: {z , IDENTIFIER}
+
+Accepted token: { , ASSIGNMENT_OPERATOR}
+
+Accepted token: {0 , NUMERIC_LITERAL}
+
+Accepted token: { , COMMA}
+
+Accepted token: {i , IDENTIFIER}
+
+Accepted token: { , COMMA}
+
+Accepted token: {num , IDENTIFIER}
+
+Accepted token: { , INT}
+
+Accepted token: { , SEMICOLON}
+
+DEBUG: IF: Failed: { , PRINT}
+DEBUG: FOR: Failed: { , PRINT}
+Accepted token: { , PRINT}
+
+DEBUG: F: Failed: {"Enter the number :" , STRING}
+Accepted token: {"Enter the number :" , STRING}
+
+Accepted token: { , SEMICOLON}
+
+DEBUG: IF: Failed: {#print  , COMMENT}
+DEBUG: FOR: Failed: {#print  , COMMENT}
+DEBUG: PRINT: Failed: {#print  , COMMENT}
+Accepted token: {#print  , COMMENT}
+
+DEBUG: IF: Failed: { , IN}
+DEBUG: FOR: Failed: { , IN}
+DEBUG: PRINT: Failed: { , IN}
+DEBUG: COMMENT: COMMENT FAILED: { , IN}
+DEBUG: ASSIGN: Failed: { , IN}
+Accepted token: { , IN}
+
+Accepted token: {num , IDENTIFIER}
+
+Accepted token: { , SEMICOLON}
+
+DEBUG: IF: Failed: {# take input in num variable , COMMENT}
+DEBUG: FOR: Failed: {# take input in num variable , COMMENT}
+DEBUG: PRINT: Failed: {# take input in num variable , COMMENT}
+Accepted token: {# take input in num variable , COMMENT}
+
+Accepted token: { , IF}
+
+Accepted token: {num , IDENTIFIER}
+
+Accepted token: {LT , RO}
+
+Accepted token: {0 , NUMERIC_LITERAL}
+
+Accepted token: { , COLON}
+
+Accepted token: { , BEGIN}
+
+DEBUG: IF: Failed: { , PRINT}
+DEBUG: FOR: Failed: { , PRINT}
+Accepted token: { , PRINT}
+
+DEBUG: F: Failed: {"negative number entered\n" , STRING}
+Accepted token: {"negative number entered\n" , STRING}
+
+Accepted token: { , SEMICOLON}
+
+DEBUG: IF: Failed: {#print , COMMENT}
+DEBUG: FOR: Failed: {#print , COMMENT}
+DEBUG: PRINT: Failed: {#print , COMMENT}
+Accepted token: {#print , COMMENT}
+
+DEBUG: IF: Failed: { , RETURN}
+DEBUG: FOR: Failed: { , RETURN}
+DEBUG: PRINT: Failed: { , RETURN}
+DEBUG: COMMENT: COMMENT FAILED: { , RETURN}
+DEBUG: ASSIGN: Failed: { , RETURN}
+DEBUG: IN: Failed: { , RETURN}
+Accepted token: { , RETURN}
+
+Accepted token: {0 , NUMERIC_LITERAL}
+
+Accepted token: { , SEMICOLON}
+
+DEBUG: IF: Failed: {# this statement just halt the program , COMMENT}
+DEBUG: FOR: Failed: {# this statement just halt the program , COMMENT}
+DEBUG: PRINT: Failed: {# this statement just halt the program , COMMENT}
+Accepted token: {# this statement just halt the program , COMMENT}
+
+DEBUG: IF: Failed: { , END}
+DEBUG: FOR: Failed: { , END}
+DEBUG: PRINT: Failed: { , END}
+DEBUG: COMMENT: COMMENT FAILED: { , END}
+DEBUG: ASSIGN: Failed: { , END}
+DEBUG: IN: Failed: { , END}
+DEBUG: RETURN: Failed: { , END}
+DEBUG: CODE_BODY: Failed: { , END}
+Accepted token: { , END}
+
+DEBUG: CODE_BODY_END: Failed: { , ELSE}
+DEBUG: CODE_BODY_END: Failed: { , ELSE}
+DEBUG: CODE_BODY_END: Failed: { , ELSE}
+DEBUG: CODE: Failed: { , ELSE}
+Accepted token: { , ELSE}
+
+DEBUG: IF: Failed: { , BEGIN}
+DEBUG: FOR: Failed: { , BEGIN}
+DEBUG: PRINT: Failed: { , BEGIN}
+DEBUG: COMMENT: COMMENT FAILED: { , BEGIN}
+DEBUG: ASSIGN: Failed: { , BEGIN}
+DEBUG: IN: Failed: { , BEGIN}
+DEBUG: RETURN: Failed: { , BEGIN}
+DEBUG: CODE_BODY: Failed: { , BEGIN}
+DEBUG: CODE_BODY_END: Failed: { , BEGIN}
+DEBUG: CODE_BODY_END: Failed: { , BEGIN}
+DEBUG: CODE_BODY_END: Failed: { , BEGIN}
+DEBUG: CODE_BODY_END: Failed: { , BEGIN}
+DEBUG: CODE_BODY_END: Failed: { , BEGIN}
+DEBUG: CODE_BODY_END: Failed: { , BEGIN}
+DEBUG: CODE_BODY_END: Failed: { , BEGIN}
+DEBUG: CODE_BODY_END: Failed: { , BEGIN}
+DEBUG: CODE: Failed: { , BEGIN}
+DEBUG: FUNC: Failed: { , BEGIN}
+DEBUG: COMMENT: COMMENT FAILED: { , BEGIN}
+DEBUG: START: Failed: { , BEGIN}
 
 0

@@ -33,9 +33,15 @@ public:
     bool F();
     // ASSIGNMENT
     bool ASSIGN();
-    bool ASSIGN_();
+    bool ASSIGN_2();
+    bool ASSIGN_3();
+    bool ASSIGN_4();
     // FOR
     bool FOR();
+    bool FOR_ASSIGN();
+
+    // IN
+    bool IN();
 
     bool CODE();
     bool CODE_BODY();
