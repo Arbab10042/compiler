@@ -7,6 +7,10 @@ class parser
     lexer _lexer;
 
 public:
+    bool DEBUG = false;
+
+    void debug(const string &where, const string &messages, const token &t);
+
     void syntax_error();
     token expect(TokenType expected_type);
     parser(const char filename[]);
@@ -18,6 +22,8 @@ public:
       */
     // all your parser function goes here
 
+    bool START();
+
     // EXPRESSION
     bool EXPR(); // wrapper E()
     bool E();
@@ -27,15 +33,15 @@ public:
     bool F();
     // ASSIGNMENT
     bool ASSIGN();
+    bool ASSIGN_();
     // FOR
     bool FOR();
 
-    bool CODE_BODY();
-
     bool CODE();
+    bool CODE_BODY();
+    bool CODE_BODY_END();
 
     bool IF();
-
     bool IF_();
 
     // VARIABLE
@@ -50,15 +56,13 @@ public:
 
     // COMMENT
     bool COMMENT();
-    bool COMMENT_BODY();
     bool STRING();
-    bool ASCII();
-    bool LETTER();
-    bool SPECIAL();
+    bool STRING_BODY();
 
     // OPERATOR
-    bool ARTH_OP();
-    bool RELATIONAL_OP();
+    bool ARITHEMATIC_OPERATOR();
+    bool RELATIONAL_OPERATOR();
+    bool RELATIONAL_OPERATOR_();
 
     // PRINT
     bool PRINT();
@@ -68,10 +72,7 @@ public:
     bool RETURN();
     bool RETURN_BODY();
 
-    // ASSIGNMENT COND
-    bool ASSIGN_COND();
-
     // CONDITIONAL STATEMENT
-    bool COND();
+    bool CONDITIONAL_STATEMENT();
 };
 #endif

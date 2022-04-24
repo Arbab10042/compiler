@@ -1,5 +1,68 @@
-This will be your grammar file in future assignments
-Leave it as it is for now
-GRAMMAR:
+S -> Function S .
+S -> Comment S .
 
-Regular Expressions used in GRAMMAR
+Expression -> T E` .
+E` -> + T E` .
+E` -> - T E` .
+E` -> .
+T -> F T` .
+T` -> * F T` .
+T` -> / F T` .
+T` -> % F T .
+T` -> .
+F -> id .
+F -> num .
+
+Print -> print PrintBody .
+PrintBody -> Expression .
+PrintBody -> String .
+
+Comment -> \# StringBody \n .
+
+String -> " StringBody " .
+StringBody -> char StringBody .
+StringBody -> num StringBody .
+StringBody -> .
+
+Assignment -> id < - Expression Assignment` .
+Assignment` -> Type ; .
+Assignment` -> ; .
+
+Type -> int .
+Type -> char .
+
+Eof -> \n .
+
+Return -> return ReturnBody .
+ReturnBody -> Expression .
+ReturnBody -> String .
+ReturnBody -> .
+
+Function -> func Type id : Code .
+
+Code -> begin CodeBody .
+CodeBody -> If CodeBody CodeBodyEnd .
+CodeBody -> For CodeBody CodeBodyEnd .
+CodeBody -> Print CodeBody CodeBodyEnd .
+CodeBody -> Comment CodeBody CodeBodyEnd .
+CodeBody -> Assignment CodeBody CodeBodyEnd .
+CodeBodyEnd -> Return end .
+CodeBodyEnd -> end .
+
+If -> if ConditionalStatement : Code If' .
+If' -> elif ConditionalStatement : Code If' .
+If' -> else : Code .
+If' -> .
+
+ConditionalStatement -> Expression RelationalOP Expression .
+
+For -> for Assignment, ConditionalStatement, Assignment : Code .
+
+ArthimaticOP -> + .
+ArthimaticOP -> - .
+ArthimaticOP -> / .
+ArthimaticOP -> * .
+ArthimaticOP -> % .
+
+RelationalOP -> = | ~ = | < RelationalOP' | > RelationalOP' .
+RelationalOP' -> = | .
